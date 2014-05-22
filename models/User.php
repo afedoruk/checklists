@@ -22,6 +22,11 @@ class User  extends ActiveRecord implements \yii\web\IdentityInterface
     {
         return static::findOne(['access_token' => $token]);
     }
+	
+	public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
 
     public function getId()
     {
@@ -30,17 +35,17 @@ class User  extends ActiveRecord implements \yii\web\IdentityInterface
 
     public function getAuthKey()
     {
-        return $this->authKey;
+        return $this->auth_key;
     }
 
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $authKey;
+        return $this->auth_key === $authKey;
     }
 
     public function validatePassword($password)
     {
-        return Security::validatePassword($password, $this->hash);
+        return Security::validatePassword($password, $this->phash);
     }
 	
 	public function beforeSave($insert)

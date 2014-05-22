@@ -7,6 +7,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\RegisterForm;
+use app\models\LoginForm;
 
 class UserController extends Controller
 {
@@ -65,7 +66,7 @@ class UserController extends Controller
         }
     }
 
-/*    public function actionLogin()
+    public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -87,7 +88,7 @@ class UserController extends Controller
 
         return $this->goHome();
     }
-
+/*
     public function actionContact()
     {
         $model = new ContactForm();
