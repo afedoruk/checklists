@@ -13,6 +13,6 @@ class m140522_170154_add_user_id_to_checklist_table extends \yii\db\Migration
     {
         echo "m140522_170154_add_user_id_to_checklist_table cannot be reverted.\n";
 
-        return false;
+        //return false;
     }
 }

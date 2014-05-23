@@ -13,6 +13,6 @@ class m140522_165008_create_checklist_table extends \yii\db\Migration
     {
         echo "m140522_165008_create_checklist_table cannot be reverted.\n";
 
-        return false;
+        //return false;
     }
 }

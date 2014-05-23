@@ -13,6 +13,6 @@ class m140522_154951_create_user_table extends \yii\db\Migration
     {
         echo "m140522_154951_create_user_table cannot be reverted.\n";
 
-        return false;
+        //return false;
     }
 }
