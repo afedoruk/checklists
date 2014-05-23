@@ -6,11 +6,12 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use app\models\ChecklistForm;
+use app\models\Checklist;
 
-class SiteController extends Controller
+class ChecklistController extends Controller
 {
+	/*
     public function behaviors()
     {
         return [
@@ -33,7 +34,8 @@ class SiteController extends Controller
             ],
         ];
     }
-
+*/
+/*
     public function actions()
     {
         return [
@@ -45,29 +47,31 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
-    }
+    }*/
 
     public function actionIndex()
     {
-        return $this->render('index');
+    	$lists = Checklist::findAll(['user_id'=>Yii::$app->user->identity->id]);
+	
+        return $this->render('index', ['lists'=>$lists]);
     }
-
-    public function actionContact()
+	
+	public function actionCreate()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
+         $model = new ChecklistForm();
+        if ($model->load(Yii::$app->request->post()) && $model->createChecklist()) {
+            return $this->goBack();
         } else {
-            return $this->render('contact', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
     }
-
-    public function actionAbout()
+	//TODO:проверка принадлежности и приватности
+	public function actionView($id)
     {
-        return $this->render('about');
+    	 $list = Checklist::findOne($id);         
+		 
+         return $this->render('view', ['list' => $list,]);        
     }
 }

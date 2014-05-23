@@ -6,11 +6,12 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use app\models\RegisterForm;
 use app\models\LoginForm;
-use app\models\ContactForm;
 
-class SiteController extends Controller
+class UserController extends Controller
 {
+	/*
     public function behaviors()
     {
         return [
@@ -33,7 +34,8 @@ class SiteController extends Controller
             ],
         ];
     }
-
+*/
+/*
     public function actions()
     {
         return [
@@ -45,13 +47,48 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
-    }
+    }*/
 
     public function actionIndex()
     {
         return $this->render('index');
     }
+	
+	public function actionRegister()
+    {
+         $model = new RegisterForm();
+        if ($model->load(Yii::$app->request->post()) && $model->register()) {
+            return $this->goBack();
+        } else {
+            return $this->render('register', [
+                'model' => $model,
+            ]);
+        }
+    }
 
+    public function actionLogin()
+    {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
+    }
+/*
     public function actionContact()
     {
         $model = new ContactForm();
@@ -69,5 +106,5 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
-    }
+    }*/
 }
