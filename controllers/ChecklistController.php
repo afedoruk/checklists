@@ -8,33 +8,26 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\ChecklistForm;
 use app\models\Checklist;
+use app\models\ItemForm;
 
 class ChecklistController extends Controller
 {
-	/*
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['create'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['create'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+            ],            
         ];
     }
-*/
 /*
     public function actions()
     {
@@ -71,7 +64,14 @@ class ChecklistController extends Controller
 	public function actionView($id)
     {
     	 $list = Checklist::findOne($id);         
-		 
-         return $this->render('view', ['list' => $list,]);        
+		 $model = new ItemForm();
+		  if ($model->load(Yii::$app->request->post()) && $model->createItem()) {
+            return $this->goBack();
+          } 
+          else {
+            return $this->render('view', ['list' => $list,]). $this->render('create', [
+                'model' => $model,
+            ]);
+          }        
     }
 }

@@ -11,19 +11,24 @@ use app\models\LoginForm;
 
 class UserController extends Controller
 {
-	/*
+	
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout', 'register'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                    	'actions'=> ['register'],
+                    	'allow' => true,
+                    	'roles' => ['?']
+                    ]
                 ],
             ],
             'verbs' => [
@@ -34,7 +39,7 @@ class UserController extends Controller
             ],
         ];
     }
-*/
+
 /*
     public function actions()
     {
