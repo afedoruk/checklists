@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <?= $form->field($model, 'title') ?>
-    <?= $form->field($model, 'description') ?>
+    <?= $form->field($model, 'description')->textarea() ?>
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
