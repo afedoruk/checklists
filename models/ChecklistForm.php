@@ -27,7 +27,8 @@ class ChecklistForm extends Model
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['doneItems'] = ['id', 'status', 'items'];     
+        $scenarios['doneItems'] = ['id', 'status', 'items'];
+		$scenarios['delete'] = ['id'];     
         return $scenarios;
     }    
 	
@@ -71,5 +72,16 @@ class ChecklistForm extends Model
             return false;
         }
 	}
+	
+	public function deleteChecklist()
+    {
+        if ($this->validate()) {        	
+        	$list = Checklist::findOne($this->id);	
+			
+            return $list->delete();           
+        } else {
+            return false;
+        }
+    }    
 	    
 }

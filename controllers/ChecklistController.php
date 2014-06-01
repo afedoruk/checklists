@@ -77,8 +77,9 @@ class ChecklistController extends Controller
 		 $list = Checklist::findOne($id);
 		 if($list->isOwner()) {
 		 
-		 $model = new DeleteChecklistForm();
+		 $model = new ChecklistForm();
 		 $model->id=$list->id;
+		 $model->scenario = 'delete';
 		 
         if ($model->load(Yii::$app->request->post()) && $model->deleteChecklist()) {
             return $this->redirect(['checklist/my']);
