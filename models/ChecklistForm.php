@@ -33,7 +33,7 @@ class ChecklistForm extends Model
         if ($this->validate()) {
         	$list = new Checklist();
 			$list->title=$this->title;
-			$list->descript=$this->description;			
+			$list->description=$this->description;			
 			$list->user_id=Yii::$app->user->identity->id;			 
             return $list->save();           
         } else {
