@@ -16,6 +16,11 @@ class Category extends ActiveRecord
         return $this->hasMany(Checklist::className(), ['category_id' => 'id'])->inverseOf('category');
     }
 	
+	public function getPublic()
+    {
+        return $this->hasMany(Checklist::className(), ['category_id' => 'id'])->where('private = 0');
+    }
+	
 	public function getAll()
 	{
 		$categories=array();

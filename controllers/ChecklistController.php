@@ -29,14 +29,8 @@ class ChecklistController extends Controller
                 ],
             ],            
         ];
-    }
+    }	
 	
-	public function attributeLabels()
-    {
-        return [
-            'category_id' => 'Category',    
-        ];
-    }
 /*
     public function actions()
     {

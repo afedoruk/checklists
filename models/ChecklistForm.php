@@ -21,6 +21,13 @@ class ChecklistForm extends Model
 	public $status;
 	public $items;
 	public $categories;
+	
+	public function attributeLabels()
+    {
+        return [
+            'category_id' => 'Category',    
+        ];
+    }
 
     /**
      * @return array the validation rules.
