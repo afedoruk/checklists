@@ -13,7 +13,7 @@ class ChecklistForm extends Model
 {
     public $title;
     public $description;
-    //public $rememberMe = true;
+    public $private = true;
 
     /**
      * @return array the validation rules.
@@ -21,9 +21,9 @@ class ChecklistForm extends Model
     public function rules()
     {
         return [
-            [['title'], 'required'],
-            [['description'], 'string'],                        
-            //['rememberMe', 'boolean'],      
+            ['title', 'required'],
+            ['description', 'string'],                        
+            ['private', 'boolean'],      
             
         ];
     }   
@@ -33,7 +33,8 @@ class ChecklistForm extends Model
         if ($this->validate()) {
         	$list = new Checklist();
 			$list->title=$this->title;
-			$list->description=$this->description;			
+			$list->description=$this->description;
+			$list->private=$this->private;			
 			$list->user_id=Yii::$app->user->identity->id;			 
             return $list->save();           
         } else {

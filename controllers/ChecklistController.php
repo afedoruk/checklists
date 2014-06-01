@@ -17,10 +17,10 @@ class ChecklistController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create'],
+                'only' => ['create', 'my'],
                 'rules' => [
                     [
-                        'actions' => ['create'],
+                        'actions' => ['create', 'my'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -43,6 +43,13 @@ class ChecklistController extends Controller
     }*/
 
     public function actionIndex()
+    {
+    	$lists = Checklist::findAll(['user_id'=>Yii::$app->user->identity->id]);
+	
+        return $this->render('index', ['lists'=>$lists]);
+    }
+	
+	public function actionMy()
     {
     	$lists = Checklist::findAll(['user_id'=>Yii::$app->user->identity->id]);
 	
