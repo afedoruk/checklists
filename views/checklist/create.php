@@ -17,8 +17,8 @@ else
 
 
 $this->params['breadcrumbs'][] = ['label' => 'My lists', 'url' => ['checklist/my']];
-if($list->id)
-	$this->params['breadcrumbs'][] = ['label' => $list->title, 'url' => ['checklist/view', 'id'=>$list->id]];
+if($model->id)
+	$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['checklist/view', 'id'=>$model->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="checklist-create">
@@ -31,8 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
             'labelOptions' => ['class' => 'col-lg-1 control-label'],
         ],
-    ]); ?>
+    ]);   
+    
+    ?>
 
+
+    <?= $form->field($model, 'category_id')->dropDownList($model->categories) ?>
     <?= $form->field($model, 'title') ?>
     <?= $form->field($model, 'description')->textarea() ?>
     <?= $form->field($model, 'rawItems')->textarea() ?>

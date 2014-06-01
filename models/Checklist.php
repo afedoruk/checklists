@@ -13,6 +13,11 @@ class Checklist  extends ActiveRecord
         return 'checklist';
     }
 	
+	public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+	
 	public function isOwner($user_id=null)
 	{
 		if($user_id) {

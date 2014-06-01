@@ -13,12 +13,14 @@ class ChecklistForm extends Model
 {
 	public $id = null;
 	public $parent_id = null;
+	public $category_id;
     public $title;
     public $description;
     public $private = true;
 	public $rawItems;
 	public $status;
 	public $items;
+	public $categories;
 
     /**
      * @return array the validation rules.
@@ -35,6 +37,8 @@ class ChecklistForm extends Model
     public function rules()
     {
         return [        	
+        	['category_id', 'integer'],
+        	['category_id', 'required'],
             ['title', 'required'],
             ['description', 'string'],                        
             ['private', 'boolean'],      
@@ -54,6 +58,7 @@ class ChecklistForm extends Model
 			$list->parent_id=$this->parent_id;
 			$list->title=$this->title;
 			$list->description=$this->description;
+			$list->category_id=$this->category_id;
 			$list->private=$this->private;			
 			$list->rawItems=$this->rawItems;			
 			$list->user_id=Yii::$app->user->identity->id;			 

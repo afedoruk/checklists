@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\ChecklistForm;
 use app\models\DeleteChecklistForm;
 use app\models\Checklist;
+use app\models\Category;
 //use app\models\ItemForm;
 
 class ChecklistController extends Controller
@@ -27,6 +28,13 @@ class ChecklistController extends Controller
                     ],                    
                 ],
             ],            
+        ];
+    }
+	
+	public function attributeLabels()
+    {
+        return [
+            'category_id' => 'Category',    
         ];
     }
 /*
@@ -62,6 +70,7 @@ class ChecklistController extends Controller
 	public function actionCreate()
     {
          $model = new ChecklistForm();
+		 $model->categories=Category::getAll();
 		 
         if ($model->load(Yii::$app->request->post()) && $model->createChecklist()) {
             return $this->redirect(['checklist/my']);
@@ -123,6 +132,7 @@ class ChecklistController extends Controller
 		 if($list->isOwner()) {
 		 
 		 $model = new ChecklistForm();
+		 $model->categories=Category::getAll();
 		 $model->id=$list->id;
 		 $model->title=$list->title;
 		 $model->description=$list->description;
@@ -138,7 +148,7 @@ class ChecklistController extends Controller
             return $this->redirect(['checklist/view', 'id'=>$id]);;
         } else {
             return $this->render('create', [
-                'model' => $model, 'list' => $list
+                'model' => $model
             ]);
         }
 		 }
@@ -153,6 +163,7 @@ class ChecklistController extends Controller
 		 if($list->isOwner()) {
 		 
 		 $model = new ChecklistForm();
+	     $model->categories=Category::getAll();
 		 $model->parent_id=$list->id;
 		 $model->title=$list->title;
 		 $model->description=$list->description;
@@ -168,7 +179,7 @@ class ChecklistController extends Controller
             return $this->redirect(['checklist/view', 'id'=>$id]);;
         } else {
             return $this->render('create', [
-                'model' => $model, 'list' => $list
+                'model' => $model
             ]);
         }
 		 }

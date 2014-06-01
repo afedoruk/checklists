@@ -27,10 +27,12 @@ $form = ActiveForm::begin([
     ]); 
     
 
-	echo $form->field($model, 'status')->checkboxList($model->items);
+	if(sizeof($model->items)) {
+		echo $form->field($model, 'status')->checkboxList($model->items);
+	}
 
-if($list->isOwner()) {
-	echo $form->field($model, 'id')->hiddenInput();
+	if($list->isOwner()) {
+		echo $form->field($model, 'id')->hiddenInput();
 	?>
  <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
