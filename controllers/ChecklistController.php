@@ -97,15 +97,20 @@ class ChecklistController extends Controller
     {
     	 $list = Checklist::findOne($id);         
 		 if(!$list->private || $list->isOwner()) {
-	/* $model = new ItemForm();*/
-		  /*if ($model->load(Yii::$app->request->post()) && $model->createItem()) {
-            return $this->goBack();
-          } 
-          else {*/
-            return $this->render('view', ['list' => $list, 'is_owner'=> $list->user_id == Yii::$app->user->identity->id]);//. $this->render('create', [
-             //   'model' => $model,
-            //]);
-          //}        
+		 	$model = new ChecklistForm();
+			$model->id=$list->id;
+			$model->scenario='doneItems';
+			foreach($list->items as $item)
+			{				
+				$model->items[$item->id]=$item->title;
+				if($item->status)
+					$model->status[]=$item->id;
+			} 
+			if ($model->load(Yii::$app->request->post()) && $model->doneItems()) {
+            	return $this->redirect(['checklist/view', 'id'=>$id]);
+        	} else {
+            	return $this->render('view', ['list' => $list, 'model'=> $model]);
+			}
 		 } else {		 	
 		 	throw new \yii\web\ForbiddenHttpException('You don\'t have right to view this list.');		 
 		 }
@@ -137,7 +142,37 @@ class ChecklistController extends Controller
         }
 		 }
 		 else {
-			 throw new \yii\web\ForbiddenHttpException('You don\'t have right to delete this list.');
+			 throw new \yii\web\ForbiddenHttpException('You don\'t have right to edit this list.');
+		 }
+    }
+	
+	public function actionClone($id)
+    {         
+		 $list = Checklist::findOne($id);
+		 if($list->isOwner()) {
+		 
+		 $model = new ChecklistForm();
+		 $model->parent_id=$list->id;
+		 $model->title=$list->title;
+		 $model->description=$list->description;
+		 $model->private=$list->private;
+		 
+		 $rawItems=[];
+		 foreach($list->items as $item) {
+		 	$rawItems[]=$item->title;
+		 }
+		 $model->rawItems=implode("\n", $rawItems);
+		 
+        if ($model->load(Yii::$app->request->post()) && $model->createChecklist()) {
+            return $this->redirect(['checklist/view', 'id'=>$id]);;
+        } else {
+            return $this->render('create', [
+                'model' => $model, 'list' => $list
+            ]);
+        }
+		 }
+		 else {
+			 throw new \yii\web\ForbiddenHttpException('You don\'t have right to clone this list.');
 		 }
     }
 }

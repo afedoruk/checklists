@@ -1,4 +1,10 @@
-<?php if(sizeof($lists)) {
+<?php
+use yii\helpers\Html;
+
+$this->title='My checklists';
+$this->params['breadcrumbs'][] = $this->title;
+
+if(sizeof($lists)) {
 ?>
 	<ul>
 		<?php foreach($lists as $list){

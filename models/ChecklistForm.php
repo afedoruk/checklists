@@ -12,21 +12,33 @@ use app\models\Checklist;
 class ChecklistForm extends Model
 {
 	public $id = null;
+	public $parent_id = null;
     public $title;
     public $description;
     public $private = true;
 	public $rawItems;
+	public $status;
+	public $items;
 
     /**
      * @return array the validation rules.
      */
+     
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['doneItems'] = ['id', 'status', 'items'];     
+        return $scenarios;
+    }    
+	
     public function rules()
     {
-        return [
+        return [        	
             ['title', 'required'],
             ['description', 'string'],                        
             ['private', 'boolean'],      
-          	['rawItems', 'string']  
+          	['rawItems', 'string'],
+          	['status', 'safe']
         ];
     }   
     
@@ -38,6 +50,7 @@ class ChecklistForm extends Model
         	} else {
         		$list = new Checklist();
 			}			
+			$list->parent_id=$this->parent_id;
 			$list->title=$this->title;
 			$list->description=$this->description;
 			$list->private=$this->private;			
@@ -48,5 +61,15 @@ class ChecklistForm extends Model
             return false;
         }
     }	
+	
+	public function doneItems()
+	{		
+		 if ($this->validate()) {	     	   		
+        	$list = Checklist::findOne($this->id);        		 
+            return $list->doneItems($this->status);           
+        } else {
+            return false;
+        }
+	}
 	    
 }

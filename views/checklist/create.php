@@ -8,10 +8,17 @@ use yii\widgets\ActiveForm;
  * @var app\models\LoginForm $model
  */
  
-if($model->id)
+if($model->parent_id)
+	$this->title = 'Clone checklist';
+elseif($model->id)
 	$this->title = 'Edit checklist';
 else
 	$this->title = 'Create new checklist';
+
+
+$this->params['breadcrumbs'][] = ['label' => 'My lists', 'url' => ['checklist/my']];
+if($list->id)
+	$this->params['breadcrumbs'][] = ['label' => $list->title, 'url' => ['checklist/view', 'id'=>$list->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="checklist-create">
@@ -32,7 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'private')->checkbox() ?>
     <?  if($model->id) {
     		echo $form->field($model, 'id')->hiddenInput();
-    }
+    	}
+	 	if($model->parent_id) {
+    		echo $form->field($model, 'parent_id')->hiddenInput();
+    	}
 	?>
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">

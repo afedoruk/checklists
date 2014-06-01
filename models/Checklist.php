@@ -33,7 +33,7 @@ class Checklist  extends ActiveRecord
 		$this->deleteItems();    		
 		$rawItems=explode("\n", $this->rawItems);		
     	foreach($rawItems as $rawItem) {
-    		if($rawItem)) {
+    		if(trim($rawItem)) {
 	    		$item = new Item();
 				$item->title = $rawItem;				
 				$this->link('items', $item);
@@ -53,5 +53,10 @@ class Checklist  extends ActiveRecord
 	public function deleteItems()
 	{
 		Item::deleteChecklistItems($this->id);	
+	}
+	
+	public function doneItems($ids)
+	{
+		Item::doneChecklistItems($this->id, $ids);
 	}
 }

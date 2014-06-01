@@ -20,4 +20,10 @@ class Item extends ActiveRecord
 	{
 		Item::deleteAll('checklist_id = :list_id', [':list_id' => $list_id]);
 	}
+	
+	public function doneChecklistItems($list_id, $ids)
+	{
+		Item::updateAll(['status' => 0], 'checklist_id = :list_id', [':list_id' => $list_id]);
+		Item::updateAll(['status' => 1], ['in', 'id', $ids]);
+	}
 }
