@@ -11,9 +11,11 @@ use app\models\Checklist;
  */
 class ChecklistForm extends Model
 {
+	public $id = null;
     public $title;
     public $description;
     public $private = true;
+	public $rawItems;
 
     /**
      * @return array the validation rules.
@@ -24,21 +26,27 @@ class ChecklistForm extends Model
             ['title', 'required'],
             ['description', 'string'],                        
             ['private', 'boolean'],      
-            
+          	['rawItems', 'string']  
         ];
     }   
     
     public function createChecklist()
     {
         if ($this->validate()) {
-        	$list = new Checklist();
+        	if($this->id) {
+        		$list = Checklist::findOne($this->id);	
+        	} else {
+        		$list = new Checklist();
+			}			
 			$list->title=$this->title;
 			$list->description=$this->description;
 			$list->private=$this->private;			
+			$list->rawItems=$this->rawItems;			
 			$list->user_id=Yii::$app->user->identity->id;			 
             return $list->save();           
         } else {
             return false;
         }
-    }    
+    }	
+	    
 }

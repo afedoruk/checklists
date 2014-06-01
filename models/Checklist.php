@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 
 class Checklist  extends ActiveRecord
 {
+	public $rawItems;
 	
   	public static function tableName()
     {
@@ -19,5 +20,38 @@ class Checklist  extends ActiveRecord
 		} else {
 			return $this->user_id==Yii::$app->user->identity->id;
 		}
+	}
+	
+	public function getItems()
+    {
+        return $this->hasMany(Item::className(), ['checklist_id' => 'id'])->inverseOf('checklist');
+    }
+	
+	public function afterSave($insert)
+	{		
+    	parent::afterSave($insert);
+		$this->deleteItems();    		
+		$rawItems=explode("\n", $this->rawItems);		
+    	foreach($rawItems as $rawItem) {
+    		if($rawItem)) {
+	    		$item = new Item();
+				$item->title = $rawItem;				
+				$this->link('items', $item);
+			}
+    	}
+        return true;
+    	
+	}
+	
+	public function afterDelete()
+	{		
+    	parent::afterDelete();
+		$this->deleteItems();
+        return true;    	
+	}
+	
+	public function deleteItems()
+	{
+		Item::deleteChecklistItems($this->id);	
 	}
 }

@@ -64,7 +64,7 @@ class ChecklistController extends Controller
          $model = new ChecklistForm();
 		 
         if ($model->load(Yii::$app->request->post()) && $model->createChecklist()) {
-            return $this->goBack();
+            return $this->redirect(['checklist/my']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -81,7 +81,7 @@ class ChecklistController extends Controller
 		 $model->id=$list->id;
 		 
         if ($model->load(Yii::$app->request->post()) && $model->deleteChecklist()) {
-            return $this->redirect(['checklist/my']);;
+            return $this->redirect(['checklist/my']);
         } else {
             return $this->render('delete', [
                 'model' => $model, 'list' => $list
@@ -108,6 +108,36 @@ class ChecklistController extends Controller
           //}        
 		 } else {		 	
 		 	throw new \yii\web\ForbiddenHttpException('You don\'t have right to view this list.');		 
+		 }
+    }
+	
+	public function actionEdit($id)
+    {         
+		 $list = Checklist::findOne($id);
+		 if($list->isOwner()) {
+		 
+		 $model = new ChecklistForm();
+		 $model->id=$list->id;
+		 $model->title=$list->title;
+		 $model->description=$list->description;
+		 $model->private=$list->private;
+		 
+		 $rawItems=[];
+		 foreach($list->items as $item) {
+		 	$rawItems[]=$item->title;
+		 }
+		 $model->rawItems=implode("\n", $rawItems);
+		 
+        if ($model->load(Yii::$app->request->post()) && $model->createChecklist()) {
+            return $this->redirect(['checklist/view', 'id'=>$id]);;
+        } else {
+            return $this->render('create', [
+                'model' => $model, 'list' => $list
+            ]);
+        }
+		 }
+		 else {
+			 throw new \yii\web\ForbiddenHttpException('You don\'t have right to delete this list.');
 		 }
     }
 }

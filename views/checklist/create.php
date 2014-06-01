@@ -7,7 +7,11 @@ use yii\widgets\ActiveForm;
  * @var yii\widgets\ActiveForm $form
  * @var app\models\LoginForm $model
  */
-$this->title = 'Create new checklist';
+ 
+if($model->id)
+	$this->title = 'Edit checklist';
+else
+	$this->title = 'Create new checklist';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="checklist-create">
@@ -24,8 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'title') ?>
     <?= $form->field($model, 'description')->textarea() ?>
+    <?= $form->field($model, 'rawItems')->textarea() ?>
     <?= $form->field($model, 'private')->checkbox() ?>
-
+    <?  if($model->id) {
+    		echo $form->field($model, 'id')->hiddenInput();
+    }
+	?>
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
             <?= Html::submitButton('Create', ['class' => 'btn btn-primary', 'name' => 'create-button']) ?>
