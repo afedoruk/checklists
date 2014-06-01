@@ -6,9 +6,6 @@ use Yii;
 use yii\base\Model;
 use app\models\Checklist;
 
-/**
- * LoginForm is the model behind the login form.
- */
 class ChecklistForm extends Model
 {
 	public $id = null;
