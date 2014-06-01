@@ -7,6 +7,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\ChecklistForm;
+use app\models\DeleteChecklistForm;
 use app\models\Checklist;
 //use app\models\ItemForm;
 
@@ -23,7 +24,7 @@ class ChecklistController extends Controller
                         'actions' => ['create', 'my'],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
+                    ],                    
                 ],
             ],            
         ];
@@ -41,7 +42,9 @@ class ChecklistController extends Controller
             ],
         ];
     }*/
-
+    
+    
+	//TODO тут предполагаются все списки или какие-нибудь там featured списки
     public function actionIndex()
     {
     	$lists = Checklist::findAll(['user_id'=>Yii::$app->user->identity->id]);
@@ -68,19 +71,43 @@ class ChecklistController extends Controller
             ]);
         }
     }
-	
-	//TODO:проверка принадлежности и приватности
+
+	public function actionDelete($id)
+    {         
+		 $list = Checklist::findOne($id);
+		 if($list->isOwner()) {
+		 
+		 $model = new DeleteChecklistForm();
+		 $model->id=$list->id;
+		 
+        if ($model->load(Yii::$app->request->post()) && $model->deleteChecklist()) {
+            return $this->redirect(['checklist/my']);;
+        } else {
+            return $this->render('delete', [
+                'model' => $model, 'list' => $list
+            ]);
+        }
+		 }
+		 else {
+			 throw new \yii\web\ForbiddenHttpException('You don\'t have right to delete this list.');
+		 }
+    }
+		
 	public function actionView($id)
     {
     	 $list = Checklist::findOne($id);         
+		 if(!$list->private || $list->isOwner()) {
 	/* $model = new ItemForm();*/
 		  /*if ($model->load(Yii::$app->request->post()) && $model->createItem()) {
             return $this->goBack();
           } 
           else {*/
-            return $this->render('view', ['list' => $list,]);//. $this->render('create', [
+            return $this->render('view', ['list' => $list, 'is_owner'=> $list->user_id == Yii::$app->user->identity->id]);//. $this->render('create', [
              //   'model' => $model,
             //]);
           //}        
+		 } else {		 	
+		 	throw new \yii\web\ForbiddenHttpException('You don\'t have right to view this list.');		 
+		 }
     }
 }
