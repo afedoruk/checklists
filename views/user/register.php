@@ -7,14 +7,16 @@ use yii\widgets\ActiveForm;
  * @var yii\widgets\ActiveForm $form
  * @var app\models\RegisterForm $model
  */
-$this->title = 'Registration';
+ if($model->id)
+ 	$this->title = 'Update information';
+ else
+	$this->title = 'Registration';
+ 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-register">
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to register:</p>
-
+    
     <?php $form = ActiveForm::begin([
         'id' => 'register-form',
         'options' => ['class' => 'form-horizontal'],
@@ -26,12 +28,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'username') ?>
     <?= $form->field($model, 'email') ?>
+    <?php
+    if($model->id)
+	{
+		echo "<p>Choose new password if you want to change old password:</p>";
+	}
+	?>
     <?= $form->field($model, 'password')->passwordInput() ?>
     <?= $form->field($model, 'password_repeat')->passwordInput() ?>
   
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('register', ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
+            <?= Html::submitButton($model->id?'update':'register', ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
         </div>
     </div>
 

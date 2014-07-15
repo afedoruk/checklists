@@ -8,22 +8,28 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\RegisterForm;
 use app\models\LoginForm;
+use app\models\User;
 
 class UserController extends Controller
 {
-	/*
+	
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout', 'register', 'profile', 'settings'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'profile', 'settings'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                    	'actions'=> ['register'],
+                    	'allow' => true,
+                    	'roles' => ['?']
+                    ]
                 ],
             ],
             'verbs' => [
@@ -34,7 +40,7 @@ class UserController extends Controller
             ],
         ];
     }
-*/
+
 /*
     public function actions()
     {
@@ -88,23 +94,31 @@ class UserController extends Controller
 
         return $this->goHome();
     }
-/*
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
 
-            return $this->refresh();
+	public function actionProfile() 
+	{
+		$user=User::findOne(Yii::$app->user->identity->id);
+		
+		return $this->render('profile', ['user'=>$user]);
+	}
+	
+	public function actionSettings()
+	{
+		 $user = User::findOne(Yii::$app->user->identity->id);
+		 		 
+		 $model = new RegisterForm();
+		 $model->scenario='update';
+		 $model->id=$user->id;
+		 $model->username=$user->username;
+		 $model->email=$user->email; 		 
+		 
+		 
+        if ($model->load(Yii::$app->request->post()) && $model->updateInfo()) {
+            return $this->redirect(['user/profile']);;
         } else {
-            return $this->render('contact', [
-                'model' => $model,
+            return $this->render('register', [
+                'model' => $model
             ]);
-        }
-    }
-
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }*/
+        }		 
+	}
 }
